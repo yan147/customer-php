@@ -72,8 +72,8 @@ class Customer_model extends CI_Model
         if ($extra != null) {
             $this->db->set('extra', $extra);
         }
-//        $this->db->set('create_date', mdate('%Y-%m-%d %h:%i:%s'));
-        $this->db->set('create_date', 'now()',false);
+//        $this->db->set('update_date', mdate('%Y-%m-%d %h:%i:%s'));
+        $this->db->set('update_date', 'now()',false);
 
         $id = $this->input->post('id');
         $this->db->where('id', $id);
@@ -95,6 +95,8 @@ class Customer_model extends CI_Model
         $object->real_name = $this->input->post('real_name');
         $object->mobile = $this->input->post('mobile');
         $object->extra = $this->input->post('extra');
+        date_default_timezone_set('Asia/Shanghai');
+        $object->create_date =  date('Y-m-d H:i:s');
         $this->db->insert('bill_customer', $object);
         return $this->db->affected_rows();
     }
