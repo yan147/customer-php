@@ -54,7 +54,7 @@ class Customer_model extends CI_Model
         $column = 'id,real_name,mobile,extra,create_date,update_date';
         $query = $this->db->query("SELECT " . $column . " FROM `bill_customer` where id=" . $id);
 
-        return $query->row();
+        return $query->row_array();
     }
 
     public function update()

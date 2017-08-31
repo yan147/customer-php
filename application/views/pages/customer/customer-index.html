@@ -132,6 +132,7 @@
 							});
 							$.post("/index.php/customer/delete", {id:data.id}).success(
 									function(data) {
+                                        layer.msg("删除成功");
                                         if (data == 1) {
 											obj.del(); //删除对应行（tr）的DOM结构
 											layer.close(index);
