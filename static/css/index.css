@@ -1,0 +1,7 @@
+@charset "utf-8";
+
+.layui-nav-child .layui-icon {text-align: center;width: 28px;display: block;float: left;}
+
+#tabContainers iframe {
+  width: 100%;
+  border: none; }
