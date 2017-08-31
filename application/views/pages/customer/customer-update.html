@@ -20,7 +20,7 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">姓名</label>
 				<div class="layui-input-inline">
-					<input type="text" name="realname" value="<?php echo $customer['real_name']; ?>" required lay-verify="required"
+					<input type="text" name="real_name" value="<?php echo $customer['real_name']; ?>" required lay-verify="required"
 						placeholder="请输入客户姓名"  autocomplete="off" class="layui-input">
 				</div>
 				<div class="layui-form-mid layui-word-aux">必填</div>
@@ -67,7 +67,7 @@
 					shade : [ 0.1, '#fff' ]
 				});
 				$.post("/index.php/customer/update", data.field).success(function(data) {
-					if (data.code == 1) {
+					if (data == 1 || data==0) {
                         layer.msg("更新成功");
 						parent.reload(); //重载表格
 						//关闭当前页面

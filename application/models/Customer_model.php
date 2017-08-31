@@ -59,7 +59,7 @@ class Customer_model extends CI_Model
 
     public function update()
     {
-        $id = $this->input->post('id');
+
         $mobile = $this->input->post('mobile');
         if ($mobile != null) {
             $this->db->set('mobile', $mobile);
@@ -70,12 +70,14 @@ class Customer_model extends CI_Model
         }
         $extra = $this->input->post('extra');
         if ($extra != null) {
-            $this->db->set('real_name', $extra);
+            $this->db->set('extra', $extra);
         }
+//        $this->db->set('create_date', mdate('%Y-%m-%d %h:%i:%s'));
+        $this->db->set('create_date', 'now()',false);
 
+        $id = $this->input->post('id');
         $this->db->where('id', $id);
         $this->db->update('bill_customer');
-
         return $this->db->affected_rows();
     }
 

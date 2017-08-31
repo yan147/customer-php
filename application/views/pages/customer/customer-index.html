@@ -15,7 +15,7 @@
 		<div class="layui-row">
 			<label class="layui-form-label">姓名</label>
 			<div class="layui-input-block">
-				<input type="text" id="realname" placeholder="请输入客户姓名"
+				<input type="text" id="real_name" placeholder="请输入客户姓名"
 					autocomplete="off" class="layui-input">
 			</div>
 		</div>
@@ -108,7 +108,8 @@
 				$("#search").click(function() {
 					customerTable.reload({
 						where : { //设定异步数据接口的参数
-							"mobile" : $("#mobile").val()
+							"mobile" : $("#mobile").val(),
+							"real_name" : $("#real_name").val()
 						}
 					});
 				});
