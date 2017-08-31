@@ -16,15 +16,21 @@ class Customer extends CI_Controller
 
     public function lists()
     {
-        $this->customer_model->get_list();
+        echo $this->customer_model->get_list();
     }
+
     public function delete()
     {
-        $this->customer_model->get_list();
+        echo $this->customer_model->delete();
     }
 
     public function update()
     {
-        $this->customer_model->update();
+        echo $this->customer_model->update();
+    }
+
+    public function insert()
+    {
+        echo $this->customer_model->insert();
     }
 }

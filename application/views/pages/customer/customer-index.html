@@ -132,11 +132,11 @@
 							});
 							$.post("/index.php/customer/delete", {id:data.id}).success(
 									function(data) {
-										if (data.code === 0) {
+                                        if (data == 1) {
 											obj.del(); //删除对应行（tr）的DOM结构
 											layer.close(index);
 										} else {
-											layer.msg(data.msg);
+											layer.msg("删除失败");
 										}
 
 									}).error(function() {
