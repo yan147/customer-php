@@ -40,7 +40,7 @@
             <dd><a href="javascript:;" data-url="index.php/pages/customer/index"><i class="layui-icon">&#xe612;</i><span>系统管理员</span></a></dd>
           </dl>
         </li>
-        <li class="layui-nav-item"><a href="javascript:;"  data-url="index.php/pageTest"><span>商品管理</span></a></li>
+        <li class="layui-nav-item"><a href="javascript:;"  data-url="index.php/pages/goods/index"><span>商品管理</span></a></li>
         <li class="layui-nav-item"><a href="javascript:;"  data-url="index.php/pages/bill/index"><span>账单管理</span></a></li>
       </ul>
     </div>

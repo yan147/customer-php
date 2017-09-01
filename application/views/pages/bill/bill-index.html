@@ -96,7 +96,7 @@
                     field: 'real_name',
                     title: '商品数量',
                     width: 100
-                }, {title: '操作', width: 150, align: 'center', toolbar: '#operBar'}]]
+                }, {fixed: 'right', title: '操作', width: 150, align: 'center', toolbar: '#operBar'}]]
         });
         $("#insert").click(function () {
             layer.open({
@@ -152,8 +152,9 @@
     }
 </script>
 <script type="text/html" id="debtTpl">
-    {{# if( d.payable-d.received===0){ }}
+    {{# if( d.payable-d.received !=0){ }}
     <span style="color: #ff0000;">{{ d.payable-d.received }}</span>
+    {{# }else{ }}0{{#  } }}
 </script>
 </body>
 </html>

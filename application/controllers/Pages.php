@@ -10,15 +10,15 @@ class Pages extends CI_Controller
 {
     public function customer($page = 'index')
     {
-        if($page=='index'){
+        if ($page == 'index') {
             $this->load->view('pages/customer/customer-index.html');
-        }else if($page=='insert'){
+        } else if ($page == 'insert') {
             $this->load->view('pages/customer/customer-insert.html');
-        }else if($page=='update'){
+        } else if ($page == 'update') {
             $this->load->model('customer_model');
             $data['customer'] = $this->customer_model->get_model();
-            $this->load->view('pages/customer/customer-update.html',$data);
-        }else{
+            $this->load->view('pages/customer/customer-update.html', $data);
+        } else {
             show_404();
         }
     }
@@ -27,13 +27,13 @@ class Pages extends CI_Controller
     public function bill($page = 'index')
     {
 
-        if($page=='index'){
+        if ($page == 'index') {
             $this->load->view('pages/bill/bill-index.html');
-        }else if($page=='insert'){
+        } else if ($page == 'insert') {
             $this->load->view('pages/bill/bill-insert.html');
-        }else if($page=='update'){
+        } else if ($page == 'update') {
             $this->load->view('pages/bill/bill-update.html');
-        }else{
+        } else {
             show_404();
         }
     }
