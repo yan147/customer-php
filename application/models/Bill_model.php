@@ -6,7 +6,7 @@
  * Time: 21:08
  */
 
-class Customer_model extends CI_Model
+class Bill_model extends CI_Model
 {
     public $id;
     public $real_name;
@@ -35,12 +35,12 @@ class Customer_model extends CI_Model
         if ($real_name != null) {
             $this->db->like('real_name', $real_name);
         }
-        $query = $this->db->get('bill_customer', $limit, $offset);
+        $query = $this->db->get('bill_bill', $limit, $offset);
         //结果处理
         $this->load->model('page_model');
         $page = $this->page_model;
 
-        $this->db->from('bill_customer');
+        $this->db->from('bill_bill');
         $page->count = $this->db->count_all_results();
         $page->data = ($query->result());
         $this->output
@@ -51,8 +51,8 @@ class Customer_model extends CI_Model
     public function get_model()
     {
         $id = $this->input->get('id');
-        $column = 'id,real_name,mobile,extra,create_date,update_date';
-        $query = $this->db->query("SELECT " . $column . " FROM `bill_customer` where id=" . $id);
+        $this->db->where('id', $id);
+        $query = $this->db->query("bill_bill");
 
         return $query->row_array();
     }
@@ -77,7 +77,7 @@ class Customer_model extends CI_Model
 
         $id = $this->input->post('id');
         $this->db->where('id', $id);
-        $this->db->update('bill_customer');
+        $this->db->update('bill_bill');
         return $this->db->affected_rows();
     }
 
@@ -85,7 +85,7 @@ class Customer_model extends CI_Model
     {
         $id = $this->input->post('id');
         $this->db->where('id', $id);
-        $this->db->delete('bill_customer');
+        $this->db->delete('bill_bill');
         return $this->db->affected_rows();
     }
 
@@ -97,7 +97,7 @@ class Customer_model extends CI_Model
         $object->extra = $this->input->post('extra');
 //        date_default_timezone_set('Asia/Shanghai');
         $object->create_date =  date('Y-m-d H:i:s');
-        $this->db->insert('bill_customer', $object);
+        $this->db->insert('bill_bill', $object);
         return $this->db->affected_rows();
     }
 }

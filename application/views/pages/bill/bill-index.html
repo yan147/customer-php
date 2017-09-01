@@ -1,149 +1,159 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>账单列表</title>
-<link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
-<style type="text/css">
-.layui-form-label {
-	text-align: left;
-}
-</style>
+    <meta charset="utf-8">
+    <title>账单列表</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <style type="text/css">
+        .layui-form-label {
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
-	<div class="layui-fluid">
-		<div class="layui-row">
-			<label class="layui-form-label">姓名</label>
-			<div class="layui-input-block">
-				<input type="text" id="realname" placeholder="请输入客户姓名"
-					autocomplete="off" class="layui-input">
-			</div>
-		</div>
-		<div class="layui-row">
-			<label class="layui-form-label">电话</label>
-			<div class="layui-input-block">
-				<input type="text" id="mobile" placeholder="请输入客户电话"
-					autocomplete="off" class="layui-input">
-			</div>
-		</div>
-		<div class="layui-row">
-			<p class="layui-word-aux">在上方输入框内输入搜索内容,然后点击搜索</p>
-		</div>
-		<div class="layui-row">
-			<div class="layui-col-md2">
+<div class="layui-fluid layui-form">
 
-				<button id="search" class="layui-btn">搜索</button>
-				<button id="refresh" class="layui-btn">刷新</button>
-			</div>
-			<div class="layui-col-md2 layui-col-md-offset8">
-				<button id="insert" class="layui-btn" style="float: right">新增账单</button>
-			</div>
-		</div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">付款状态</label>
+        <div class="layui-input-inline">
+            <select name="city" lay-verify="required">
+                <option value="">请选择</option>
+                <option value="1">已结清</option>
+                <option value="2">有欠账</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-inline">
+            <input type="text" id="real_name" placeholder="请输入客户姓名"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-row">
+        <p class="layui-word-aux">在上方输入框内输入搜索内容,然后点击搜索</p>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md2">
 
+            <button id="search" class="layui-btn">搜索</button>
+            <button id="refresh" class="layui-btn">刷新</button>
+        </div>
+        <div class="layui-col-md2 layui-col-md-offset8">
+            <button id="insert" class="layui-btn" style="float: right">新增账单</button>
+        </div>
+    </div>
+</div>
 
-		<table id="bill-table" lay-filter="toolbar"></table>
+<table id="bill-table" lay-filter="toolbar"></table>
 
-		<script src="/static/layui/layui.js"></script>
-		<script src="/static/js/define/common.js"></script>	
-		<script type="text/html" id="operBar">
-  <a class="layui-btn layui-btn-mini" lay-event="detail">详情</a>
-  <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
-  <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
+<script src="/static/layui/layui.js"></script>
+<script src="/static/js/define/common.js"></script>
+<script type="text/html" id="operBar">
+    <a class="layui-btn layui-btn-mini" lay-event="detail">详情</a>
+    <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
 </script>
-		<script>
-			var customerTable;
-			layui.use('table', function() {
-				var $ = layui.jquery;
-				var table = layui.table;
-				customerTable = table.render({ //其它参数在此省略
-					elem : "#bill-table",
-					url : "/bill/list",
-					page : true,
-					limit : 20, //默认采用20
-					even : true,
-					cols : [ [ //标题栏
-					{
-						field : 'id',
-						title : 'ID',
-						width : 50
-					}, {
-						field : 'realname',
-						title : '客户姓名',
-						width : 100
-					}, {
-						field : 'payable',
-						title : '应付款',
-						width : 100
-					}, {
-						field : 'received',
-						title : '已付款',
-						width : 100
-					}, {
-						field : 'debt',
-						title : '欠款',
-						width : 100
-					}, {
-						field : 'realname',
-						title : '商品名称',
-						width : 100
-					}, {
-						field : 'realname',
-						title : '商品数量',
-						width : 100
-					},{title:'操作', width:150, align:'center', toolbar: '#operBar'}] ]
-				});
-				$("#insert").click(function() {
-					layer.open({
-						  type: 2,
-						  skin: 'layui-layer-molv', //默认皮肤,
-						  maxmin: true,
-						  shade: 0.3,
-						  fix: false,
-						  area: ['1000px', '600px'],
-						  content: '/view/bill/insert' //url
-						});
-				});
-				$("#search").click(function() {
-					customerTable.reload({
-						where : { //设定异步数据接口的参数
-							"mobile" : $("#mobile").val()
-						}
-					});
-				});
-				$("#refresh").click(function() {
-					customerTable.reload({where : {}});
-				});
-				//监听工具条
-				table.on('tool(toolbar)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-				  var data = obj.data; //获得当前行数据
-				  var layEvent = obj.event; //获得 lay-event 对应的值
-				  var tr = obj.tr; //获得当前行 tr 的DOM对象
-				 
-				  if(layEvent === 'detail'){ //查看
-				    alert("详情");
-				  } else if(layEvent === 'del'){ //删除
-				    layer.confirm('真的删除行么', function(index){
-				      obj.del(); //删除对应行（tr）的DOM结构
-				      layer.close(index);
-				      //向服务端发送删除指令
-				    });
-				  } else if(layEvent === 'edit'){ //编辑
-				    //do something
-				     alert("详情");
-				    //同步更新缓存对应的值
-				    obj.update({
-				      username: '123'
-				      ,title: 'xxx'
-				    });
-				  }
-				});
-				
-				
-			});
-			
-			var reload=function(){
-				customerTable.reload({});
-			}
-		</script>
+
+<script>
+    var customerTable;
+    layui.use('table', function () {
+        var $ = layui.jquery;
+        var table = layui.table;
+        customerTable = table.render({ //其它参数在此省略
+            elem: "#bill-table",
+            url: "/index.php/bill/lists",
+            page: true,
+            limit: 20, //默认采用20
+            even: true,
+            cols: [[ //标题栏
+                {
+                    field: 'id',
+                    title: 'ID',
+                    width: 50
+                }, {
+                    field: 'real_name',
+                    title: '客户姓名',
+                    width: 100
+                }, {
+                    field: 'payable',
+                    title: '应付款',
+                    width: 100
+                }, {
+                    field: 'received',
+                    title: '已付款',
+                    width: 100
+                }, {
+                    field: 'debt',
+                    title: '欠款',
+                    templet: '#debtTpl',
+                    width: 100
+                }, {
+                    field: 'real_name',
+                    title: '商品名称',
+                    width: 100
+                }, {
+                    field: 'real_name',
+                    title: '商品数量',
+                    width: 100
+                }, {title: '操作', width: 150, align: 'center', toolbar: '#operBar'}]]
+        });
+        $("#insert").click(function () {
+            layer.open({
+                type: 2,
+                skin: 'layui-layer-molv', //默认皮肤,
+                maxmin: true,
+                shade: 0.3,
+                fix: false,
+                area: ['1000px', '600px'],
+                content: '/index.php/pages/bill/insert' //url
+            });
+        });
+        $("#search").click(function () {
+            customerTable.reload({
+                where: { //设定异步数据接口的参数
+                    "mobile": $("#mobile").val()
+                }
+            });
+        });
+        $("#refresh").click(function () {
+            customerTable.reload({where: {}});
+        });
+        //监听工具条
+        table.on('tool(toolbar)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+            if (layEvent === 'detail') { //查看
+                alert("详情");
+            } else if (layEvent === 'del') { //删除
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del(); //删除对应行（tr）的DOM结构
+                    layer.close(index);
+                    //向服务端发送删除指令
+                });
+            } else if (layEvent === 'edit') { //编辑
+                //do something
+                alert("详情");
+                //同步更新缓存对应的值
+                obj.update({
+                    username: '123'
+                    , title: 'xxx'
+                });
+            }
+        });
+
+
+    });
+
+    var reload = function () {
+        customerTable.reload({});
+    }
+</script>
+<script type="text/html" id="debtTpl">
+    {{# if( d.payable-d.received===0){ }}
+    <span style="color: #ff0000;">{{ d.payable-d.received }}</span>
+</script>
 </body>
 </html>
