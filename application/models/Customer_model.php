@@ -40,12 +40,26 @@ class Customer_model extends CI_Model
         $this->load->model('page_model');
         $page = $this->page_model;
 
-        $this->db->from('bill_customer');
         $page->count = $this->db->count_all_results();
         $page->data = ($query->result());
         $this->output
             ->set_content_type('application/json;charset=utf-8')
             ->set_output(json_encode($page));
+    }
+    public function get_select_list()
+    {
+        //查询参数
+        $real_name = $this->input->get('real_name');
+        if ($real_name != null) {
+            $this->db->like('real_name', $real_name);
+        }
+        $this->db->select('id,real_name');
+        $query = $this->db->get('bill_customer', 10, 0);
+        //结果处理
+        $this->db->from('bill_customer');
+        $this->output
+            ->set_content_type('application/json;charset=utf-8')
+            ->set_output(json_encode($query->result()));
     }
 
     public function get_model()

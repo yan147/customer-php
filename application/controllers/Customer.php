@@ -14,9 +14,18 @@ class Customer extends CI_Controller
         $this->load->model('customer_model');
     }
 
-    public function lists()
+    public function page_list()
     {
         echo $this->customer_model->get_list();
+    }
+
+    /**
+     * 暂时供账单新增,下拉选择使用接口
+     * 返回 id,real_name字段
+     */
+    public function select_list()
+    {
+        echo $this->customer_model->get_select_list();
     }
 
     public function delete()
