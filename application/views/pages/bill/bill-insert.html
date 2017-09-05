@@ -19,25 +19,31 @@
         <div class="layui-form-item">
             <label class="layui-form-label">客户信息</label>
             <div class="layui-input-inline">
-                <select id="customer-select" name="customer"></select>
+                <select id="customer-select" name="customer_id"></select>
             </div>
             <div class="layui-form-mid layui-word-aux">不选则记为临时客户</div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">商品信息</label>
             <div class="layui-input-block">
-                <div class="layui-col-md6">
+                <div class="layui-col-md4">
                     <input type="text" name="received" required lay-verify="required"
                            placeholder="请输入商品信息" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-col-md1">
+                    <label class="layui-form-label">数量</label>
                 </div>
                 <div class="layui-col-md2">
                     <input type="text" name="received" required
                            lay-verify="required|number" placeholder="数量" autocomplete="off"
                            class="layui-input">
                 </div>
+                <div class="layui-col-md1">
+                    <label class="layui-form-label">金额</label>
+                </div>
                 <div class="layui-col-md2">
                     <input type="text" name="received" required
-                           lay-verify="required|number" placeholder="金额" autocomplete="off"
+                           lay-verify="required|number" placeholder="单位/元" autocomplete="off"
                            class="layui-input">
                 </div>
                 <div class="layui-col-md2">
@@ -83,48 +89,49 @@
     layui.use('form', function () {
         var form = layui.form;
         var $ = layui.jquery;
-        var tempVar = '',isInitSelect=false;
-
+        var tempVar = '', isInitSelect = false, customer_id = '';
         var renderOption = function (inputVal) {
             $.get("/index.php/customer/select_list", {'real_name': inputVal}).success(function (data) {
-                var  option = '<option value="">输入搜索或直接选择</option>';//占位(第一个option的value=''
-                var anim='';
+                var option = '<option value="">输入搜索或直接选择</option>';//占位(第一个option的value=''
+                var anim = '';
                 $.each(data, function () {
                     option += '<option value=' + this.id + '>' + this.real_name + '</option>';
                     anim += '<dd lay-value=' + this.id + '>' + this.real_name + '</dd>';
                 });
-                if(data==''||data.length==0){
-                    anim='<dd lay-value="" class="layui-select-tips">无匹配数据</dd>';
+                if (data == '' || data.length == 0) {
+                    anim = '<dd lay-value="" class="layui-select-tips">无匹配数据</dd>';
                 }
-                $('#customer-select').html(
-                    option
-                );
+                $('#customer-select').html(option);
                 if (!isInitSelect) {//如果没有初始化过
                     form.render('select');
-                    $('.layui-select-title input').removeAttr("readonly");
-                    $('.layui-select-title input').on('input', function () {
+                    var input = $('.layui-select-title input');
+                    input.removeAttr("readonly");
+                    input.on('input', function () {
                         tempVar = $(this).val();
-                        console.log('1111输入框内容变化=' + tempVar);
                         renderOption(tempVar);
                     });
-                    isInitSelect=true;
+                    isInitSelect = true;
                 } else {
-                    $('dl.layui-anim').html(anim);
+                    var dl = $('dl.layui-anim');
+                    dl.html(anim);
+
+                    var g = dl.children("dd");
+                    var input = $('.layui-select-title input');
+                    g.on("click", function () {
+                        var e = $(this), r = 'layui-this';
+                        customer_id = e.attr("lay-value")
+                        return (e.hasClass("layui-select-tips") ? input.val("") : (input.val(e.text()), e.addClass(r)),
+                            e.siblings().removeClass(r));
+                    });
+
                 }
-
-
             }).error(function () {
                 layer.msg('发送请求失败');
             }).complete(function () {
 
             });
         }
-        //监听下拉选择
-        //            form.on('select(customer-select-filter)', function(data){
-        //                console.log(data.elem); //得到select原始DOM对象
-        //                console.log(data.value); //得到被选中的值
-        //                console.log(data.othis); //得到美化后的DOM对象
-        //            });
+
 
         //初始化下拉选择
         renderOption(tempVar);
@@ -135,7 +142,8 @@
                 shade: [0.1, '#fff']
                 //0.1透明度的白色背景
             });
-            $.post("index.php/bill/insert", data.field).success(function () {
+            $.extend(data.field, {'customer_id': customer_id})
+            $.post("/index.php/bill/insert", data.field).success(function () {
                 parent.reload(); //重载表格
                 var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
                 parent.layer.close(index);

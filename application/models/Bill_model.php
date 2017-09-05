@@ -9,8 +9,9 @@
 class Bill_model extends CI_Model
 {
     public $id;
-    public $real_name;
-    public $mobile;
+    public $customer_id;
+    public $payable;
+    public $received;
     public $extra;
     public $create_date;
     public $update_date;
@@ -27,14 +28,14 @@ class Bill_model extends CI_Model
         $limit = $this->input->get('limit');
         $offset = $limit * ($page - 1);
 
-        $mobile = $this->input->get('mobile');
-        if ($mobile != null) {
-            $this->db->like('mobile', $mobile);
-        }
-        $real_name = $this->input->get('real_name');
-        if ($real_name != null) {
-            $this->db->like('real_name', $real_name);
-        }
+//        $mobile = $this->input->get('mobile');
+//        if ($mobile != null) {
+//            $this->db->like('mobile', $mobile);
+//        }
+//        $real_name = $this->input->get('real_name');
+//        if ($real_name != null) {
+//            $this->db->like('real_name', $real_name);
+//        }
         $query = $this->db->get('bill_bill', $limit, $offset);
         //结果处理
         $this->load->model('page_model');
@@ -60,13 +61,13 @@ class Bill_model extends CI_Model
     public function update()
     {
 
-        $mobile = $this->input->post('mobile');
-        if ($mobile != null) {
-            $this->db->set('mobile', $mobile);
+        $received = $this->input->post('mobile');
+        if ($received != null) {
+            $this->db->set('received', $received);
         }
-        $real_name = $this->input->post('real_name');
-        if ($real_name != null) {
-            $this->db->set('real_name', $real_name);
+        $payable = $this->input->post('payable');
+        if ($payable != null) {
+            $this->db->set('payable', $payable);
         }
         $extra = $this->input->post('extra');
         if ($extra != null) {
@@ -91,9 +92,10 @@ class Bill_model extends CI_Model
 
     public function insert()
     {
-        $object = new Customer_model;
-        $object->real_name = $this->input->post('real_name');
-        $object->mobile = $this->input->post('mobile');
+        $object = new Bill_model;
+        $object->customer_id = $this->input->post('customer_id');
+        $object->payable = $this->input->post('payable');
+        $object->received = $this->input->post('received');
         $object->extra = $this->input->post('extra');
 //        date_default_timezone_set('Asia/Shanghai');
         $object->create_date =  date('Y-m-d H:i:s');
