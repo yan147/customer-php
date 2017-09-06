@@ -82,14 +82,16 @@
         </div>
         <div class="layui-col-sm1">
             <input type="text" name="goods_money" required
-                   lay-verify="required|number" placeholder="元" autocomplete="off"
+                   lay-verify="required|number" placeholder="元(数字)" autocomplete="off"
                    class="layui-input">
         </div>
-        {{#if(d.hasButton){ }}
         <div class="layui-col-sm2 layui-col-sm-offset1">
+            {{#if(d.isFirst){ }}
             <button id="add_goods" class="layui-btn">新增一条</button>
+            {{# }else{ }}
+            <button name="rm_goods" class="layui-btn">移除此条</button>
+            {{# } }}
         </div>
-        {{# } }}
     </div>
 
 </script>
@@ -99,15 +101,37 @@
             $ = layui.jquery;
         var tempVar = '', isInitSelect = false, customer_id = '';
         var laytpl = layui.laytpl;
-        laytpl($('#goods_input').html()).render({'hasButton':true}, function(html){
+        laytpl($('#goods_input').html()).render({'isFirst': true}, function (html) {
             $('#goods_input_div').html(html);
         });
-        $('#add_goods').on('click',function () {
-            var $inline=$(this).parent().parent(".layui-inline");
+
+        /**
+         * 将每条商品信息数据的价格相加后赋值到需付款
+         */
+        var copyCount= function() {
+            $('input[name="goods_money"]').blur(function () {
+                var total = 0;
+                $('input[name="goods_money"]').each(function () {
+                    total += parseInt(this.value);
+                });
+                $('input[name="payable"]').val(total);
+            })
+        }
+        copyCount();
+        $('#add_goods').on('click', function () {
+            var $inline = $(this).parent().parent(".layui-inline");
             //$inline.after($inline.clone())
-            laytpl($('#goods_input').html()).render({'hasButton':false}, function(html){
+            laytpl($('#goods_input').html()).render({'isFirst': false}, function (html) {
                 $inline.after(html);
-            });;
+                $('button[name="rm_goods"]').on('click', function () {
+                    var $payable=$('input[name="payable"]');
+                    var $rm_inline =$(this).parent().parent(".layui-inline");
+                    var money= $rm_inline.find('input[name="goods_money"]').val();
+                    $payable.val(parseInt($payable.val())-parseInt(money));
+                    $rm_inline.remove();
+                });
+                copyCount();
+            });
 
         });
         var renderOption = function (inputVal) {
