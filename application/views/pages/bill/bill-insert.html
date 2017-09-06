@@ -26,27 +26,27 @@
         <div class="layui-form-item">
             <label class="layui-form-label">商品信息</label>
             <div class="layui-input-block">
-                <div class="layui-col-md4">
+                <div class="layui-col-sm3">
                     <input type="text" name="received" required lay-verify="required"
                            placeholder="请输入商品信息" autocomplete="off" class="layui-input">
                 </div>
-                <div class="layui-col-md1">
+                <div class="layui-col-sm1">
                     <label class="layui-form-label">数量</label>
                 </div>
-                <div class="layui-col-md2">
+                <div class="layui-col-sm1">
                     <input type="text" name="received" required
                            lay-verify="required|number" placeholder="数量" autocomplete="off"
                            class="layui-input">
                 </div>
-                <div class="layui-col-md1">
+                <div class="layui-col-sm1">
                     <label class="layui-form-label">金额</label>
                 </div>
-                <div class="layui-col-md2">
+                <div class="layui-col-sm1">
                     <input type="text" name="received" required
-                           lay-verify="required|number" placeholder="单位/元" autocomplete="off"
+                           lay-verify="required|number" placeholder="元" autocomplete="off"
                            class="layui-input">
                 </div>
-                <div class="layui-col-md2">
+                <div class="layui-col-sm2 layui-col-sm-offset1">
                     <button class="layui-btn">新增一条</button>
                 </div>
             </div>
@@ -131,8 +131,6 @@
 
             });
         }
-
-
         //初始化下拉选择
         renderOption(tempVar);
 
