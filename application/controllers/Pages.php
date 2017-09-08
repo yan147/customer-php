@@ -39,4 +39,19 @@ class Pages extends CI_Controller
             show_404();
         }
     }
+    public function goods($page = 'index')
+    {
+
+        if ($page == 'index') {
+            $this->load->view('pages/goods/goods-index.html');
+        } else if ($page == 'insert') {
+            $this->load->view('pages/goods/goods-insert.html');
+        } else if ($page == 'update') {
+            $this->load->model('goods_model');
+            $data['goods'] = $this->goods_model->get_model();
+            $this->load->view('pages/goods/goods-update.html',$data);
+        } else {
+            show_404();
+        }
+    }
 }
