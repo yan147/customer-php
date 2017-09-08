@@ -6,7 +6,7 @@
  * Time: 21:08
  */
 
-class Bill_model extends CI_Model
+class Goods_model extends CI_Model
 {
     public $id;
     public $price;

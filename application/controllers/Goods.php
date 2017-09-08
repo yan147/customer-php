@@ -19,15 +19,6 @@ class Goods extends CI_Controller
         echo $this->goods_model->get_list();
     }
 
-    /**
-     * 暂时供账单新增,下拉选择使用接口
-     * 返回 id,real_name字段
-     */
-    public function select_list()
-    {
-        echo $this->goods_model->get_select_list();
-    }
-
     public function delete()
     {
         echo $this->goods_model->delete();
