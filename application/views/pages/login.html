@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Apple devices fullscreen -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- Apple devices fullscreen -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <title>客户管理系统</title>
+
+    <link href="/static/css/login.css" rel="stylesheet" type="text/css">
+    <link href="/static/font/css/font-awesome.min.css" rel="stylesheet">
+    <script src="/static/layui/layui.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/jquery.supersized.min.js"></script>
+</head>
+
+<body>
+<!--主体-->
+<div class="login-layout">
+    <div class="top">
+        <h2>客户管理系统</h2>
+    </div>
+    <form method="get" class="layui-form" id="form_login" action="">
+        <div class="lock-holder">
+            <div class="form-group pull-left input-username">
+                <label>账号</label>
+                <input name="username" id="username" autocomplete="off" type="text" class="input-text"
+                       lay-verify="required" value="" required>
+            </div>
+            <i class="fa fa-ellipsis-h dot-left"></i> <i class="fa fa-ellipsis-h dot-right"></i>
+            <div class="form-group pull-right input-password-box">
+                <label>密码</label>
+                <input name="password" id="password" class="input-text" autocomplete="off" type="password" required
+                       lay-verify="required" pattern="[\S]{6}[\S]*" title="密码不少于6个字符">
+            </div>
+        </div>
+        <div class="avatar"><img src="/static/images/login/avatar.jpg" alt=""></div>
+        <div class="submit">
+            <span>
+              <input name="" class="input-button btn-submit" type="button" value="登录">
+            </span>
+        </div>
+    </form>
+    <div class="bottom">
+    </div>
+</div>
+
+<!--页面JS脚本-->
+<script>
+    layui.use('form', function () {
+        var form = layui.form;
+        $(document).ready(function () {
+            $.supersized({
+                // 功能
+                slide_interval: 4000,
+                transition: 1,
+                transition_speed: 1000,
+                performance: 1,
+                // 大小和位置
+                min_width: 0,
+                min_height: 0,
+                vertical_center: 1,
+                horizontal_center: 1,
+                fit_always: 0,
+                fit_portrait: 1,
+                fit_landscape: 0,
+                // 组件
+                slide_links: 'blank',
+                slides: [
+                    {image: '/static/images/login/1.jpg'},
+                    {image: '/static/images/login/2.jpg'},
+                    {image: '/static/images/login/3.jpg'},
+                    {image: '/static/images/login/4.jpg'},
+                    {image: '/static/images/login/5.jpg'}
+                ]
+            });
+            var hide = function () {
+                $('.input-username,dot-left').addClass('animated fadeOutRight');
+                $('.input-password-box,dot-right').addClass('animated fadeOutLeft');
+                $('.btn-submit').addClass('animated fadeOutUp');
+                $('.avatar').addClass('avatar-top');
+                $('.submit').hide();
+            }
+            var show = function () {
+                $('.input-username,dot-left').removeClass('animated fadeOutRight');
+                $('.input-password-box,dot-right').removeClass('animated fadeOutLeft');
+                $('.btn-submit').removeClass('animated fadeOutUp');
+                $('.avatar').removeClass('avatar-top');
+                $('.submit').show();
+            }
+            //跳出框架在主窗口登录
+//            if (top.location != this.location) top.location = this.location;
+            $('#user_name').focus();
+            //动画登录
+            $('.btn-submit').click(function (data) {
+                hide();
+                setTimeout(function () {
+                        var loading = layer.load(1, {
+                            shade: [0.1, '#fff']
+                        });
+                        $.ajax({
+                            url: '/index.php/login',
+                            type: 'get',
+                            data: $("#form_login").serialize(),
+                            success: function (data) {
+                                if (data.code == 0) {
+                                    location.href = '/index.php/pages/index';
+                                } else {
+                                    layer.msg(data.msg);
+                                    show()
+                                }
+                            }, error: function () {
+                                layer.msg('请求失败');
+                                show();
+                            }, complete: function () {
+                                layer.close(loading);
+                            }
+                        });
+                    },
+                    300);
+
+            })
+            ;
+            // 回车提交表单
+            $('#form_login').keydown(function (event) {
+                if (event.keyCode == 13) {
+                    $('.btn-submit').click();
+                }
+            });
+        });
+    });
+
+
+</script>
+</body>
+</html>

@@ -6,14 +6,12 @@
  * Time: 21:08
  */
 
-class Goods_model extends CI_Model
+class User_model extends CI_Model
 {
     public $id;
-    public $price;
-    public $name;
-    public $unit;
-    public $inventory;
-    public $extra;
+    public $username;
+    public $password;
+    public $role;
     public $create_date;
     public $update_date;
 
@@ -29,21 +27,17 @@ class Goods_model extends CI_Model
         $limit = $this->input->get('limit');
         $offset = $limit * ($page - 1);
 
-//        $mobile = $this->input->get('mobile');
-//        if ($mobile != null) {
-//            $this->db->like('mobile', $mobile);
-//        }
-        $name = $this->input->get('name');
+        $username = $this->input->get('username');
 
         //结果处理
         $this->load->model('page_model');
         $page = $this->page_model;
 
-        if ($name != null) {
-            $this->db->like('name', $name);
+        if ($username != null) {
+            $this->db->where('username', $username);
         }
 
-        $query=$this->db->get('bill_goods',$limit, $offset);
+        $query=$this->db->get('bill_user',$limit, $offset);
         $page->count = $this->db->count_all_results();
         $page->data = ($query->result());
         $this->output
@@ -53,26 +47,29 @@ class Goods_model extends CI_Model
 
     public function get_model()
     {
+
+        $username = $this->input->get('username');
+        if($username!=null){
+            $this->db->where('username', $username);
+        }
         $id = $this->input->get('id');
-        $this->db->where('id', $id);
-        $query = $this->db->get('bill_goods');
+        if($id!=null){
+            $this->db->where('id', $id);
+        }
+        $query = $this->db->get('bill_user');
         return $query->row_array();
     }
 
     public function update()
     {
 
-        $name = $this->input->post('name');
-        if ($name != null) {
-            $this->db->set('name', $name);
+        $username = $this->input->post('username');
+        if ($username != null) {
+            $this->db->set('username', $username);
         }
-        $price = $this->input->post('price');
-        if ($price != null) {
-            $this->db->set('price', $price);
-        }
-        $inventory = $this->input->post('inventory');
-        if ($inventory != null) {
-            $this->db->set('inventory', $inventory);
+        $password = $this->input->post('password');
+        if ($password != null) {
+            $this->db->set('password', $password);
         }
         $extra = $this->input->post('extra');
         if ($extra != null) {
@@ -83,7 +80,7 @@ class Goods_model extends CI_Model
 
         $id = $this->input->post('id');
         $this->db->where('id', $id);
-        $this->db->update('bill_goods');
+        $this->db->update('bill_user');
         return $this->db->affected_rows();
     }
 
@@ -91,22 +88,19 @@ class Goods_model extends CI_Model
     {
         $id = $this->input->post('id');
         $this->db->where('id', $id);
-        $this->db->delete('bill_goods');
+        $this->db->delete('bill_user');
         return $this->db->affected_rows();
     }
 
     public function insert()
     {
         $object = new Bill_model;
-        $object->price = $this->input->post('price');
-        $object->name = $this->input->post('name');
-        $object->inventory = $this->input->post('inventory');
-        $object->extra = $this->input->post('extra');
-        $object->unit = $this->input->post('unit');
-
+        $object->password = $this->input->post('password');
+        $object->username = $this->input->post('username');
+        $object->role = $this->input->post('role');
 //        date_default_timezone_set('Asia/Shanghai');
         $object->create_date =  date('Y-m-d H:i:s');
-        $this->db->insert('bill_goods', $object);
+        $this->db->insert('bill_user', $object);
         return $this->db->affected_rows();
     }
 }

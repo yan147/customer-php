@@ -125,7 +125,9 @@
             var tr = obj.tr; //获得当前行 tr 的DOM对象
 
             if (layEvent === 'detail') { //查看
-                layer.alert(data.extra);
+                if(data.extra){
+                    layer.alert(data.extra);
+                }
             } else if (layEvent === 'del') { //删除
                 layer.confirm('确认删除吗?', function (index) {
                     var loading = layer.load(1, {

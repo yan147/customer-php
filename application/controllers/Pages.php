@@ -8,6 +8,16 @@
 
 class Pages extends CI_Controller
 {
+
+    public function index()
+    {
+        $this->load->view('pages/index.html');
+    }
+
+    public function login(){
+        $this->load->view('pages/login.html');
+    }
+
     public function customer($page = 'index')
     {
         if ($page == 'index') {
