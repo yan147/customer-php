@@ -112,7 +112,9 @@
             $('input[name="goods_money"]').blur(function () {
                 var total = 0;
                 $('input[name="goods_money"]').each(function () {
-                    total += parseInt(this.value);
+                    if(this.value!=""){
+                        total += parseInt(this.value);
+                    }
                 });
                 $('input[name="payable"]').val(total);
             })
@@ -183,7 +185,13 @@
                 shade: [0.1, '#fff']
                 //0.1透明度的白色背景
             });
-            $.extend(data.field, {'customer_id': customer_id})
+            var goods_info='';
+            $('#goods_input_div').find('.layui-inline').each(function () {
+                goods_info+=$(this).find('input[name="goods_desc"]').val()+"*";
+                goods_info+=$(this).find('input[name="goods_num"]').val()+"=";
+                goods_info+=$(this).find('input[name="goods_money"]').val();
+            })
+            $.extend(data.field, {'customer_id': customer_id,'goods_info':goods_info});
             $.post("/index.php/bill/insert", data.field).success(function () {
                 parent.reload(); //重载表格
                 var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引

@@ -32,7 +32,9 @@ class Pages extends CI_Controller
         } else if ($page == 'insert') {
             $this->load->view('pages/bill/bill-insert.html');
         } else if ($page == 'update') {
-            $this->load->view('pages/bill/bill-update.html');
+            $this->load->model('bill_model');
+            $data['bill'] = $this->bill_model->get_model();
+            $this->load->view('pages/bill/bill-update.html',$data);
         } else {
             show_404();
         }

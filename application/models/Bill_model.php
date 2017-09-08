@@ -11,6 +11,7 @@ class Bill_model extends CI_Model
     public $id;
     public $customer_id;
     public $payable;
+    public $goods_info;
     public $received;
     public $extra;
     public $create_date;
@@ -32,16 +33,20 @@ class Bill_model extends CI_Model
 //        if ($mobile != null) {
 //            $this->db->like('mobile', $mobile);
 //        }
-//        $real_name = $this->input->get('real_name');
-//        if ($real_name != null) {
-//            $this->db->like('real_name', $real_name);
-//        }
-        $query = $this->db->get('bill_bill', $limit, $offset);
+        $real_name = $this->input->get('real_name');
+
         //结果处理
         $this->load->model('page_model');
         $page = $this->page_model;
 
+        $this->db->select('bill_bill.*,bill_customer.real_name');
         $this->db->from('bill_bill');
+        $this->db->join('bill_customer','bill_bill.customer_id=bill_customer.id');
+        if ($real_name != null) {
+            $this->db->like('bill_customer.real_name', $real_name);
+        }
+        $this->db->limit($limit, $offset);
+        $query=$this->db->get();
         $page->count = $this->db->count_all_results();
         $page->data = ($query->result());
         $this->output
@@ -52,9 +57,11 @@ class Bill_model extends CI_Model
     public function get_model()
     {
         $id = $this->input->get('id');
-        $this->db->where('id', $id);
-        $query = $this->db->query("bill_bill");
-
+        $this->db->select('bill_bill.*,bill_customer.real_name');
+        $this->db->from('bill_bill');
+        $this->db->join('bill_customer','bill_bill.customer_id=bill_customer.id');
+        $this->db->where('bill_bill.id', $id);
+        $query = $this->db->get();
         return $query->row_array();
     }
 
@@ -97,6 +104,8 @@ class Bill_model extends CI_Model
         $object->payable = $this->input->post('payable');
         $object->received = $this->input->post('received');
         $object->extra = $this->input->post('extra');
+        $object->goods_info = $this->input->post('goods_info');
+
 //        date_default_timezone_set('Asia/Shanghai');
         $object->create_date =  date('Y-m-d H:i:s');
         $this->db->insert('bill_bill', $object);
