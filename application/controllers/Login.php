@@ -32,6 +32,13 @@ class Login extends CI_Controller
                 if ($user['password'] !== $password) {
                     $result->msg = "输入密码不正确";
                     $result->code = 10405;
+                }else{
+                    $this->load->library('session');
+                    $newdata = array(
+                        'username'  => $user['username'],
+                        'logged_in' => TRUE
+                    );
+                    $this->session->set_userdata($newdata);
                 }
             }
         }
